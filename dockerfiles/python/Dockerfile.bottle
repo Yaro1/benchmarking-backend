@@ -1,0 +1,14 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY ../functions/python/logic.py /app/logic.py
+COPY ../backends/python/bottle_app.py /app/app.py
+
+RUN pip install bottle
+
+ENV DJANGO_SECRET_KEY="my-super-secret-key"
+
+EXPOSE 8000
+
+CMD ["python", "app.py"]

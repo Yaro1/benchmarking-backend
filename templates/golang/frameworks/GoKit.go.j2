@@ -1,0 +1,44 @@
+package main
+
+import (
+    "context"
+    "net/http"
+    "encoding/json"
+    "app/functions"
+    kitendpoint "github.com/go-kit/kit/endpoint"
+    kithttp "github.com/go-kit/kit/transport/http"
+)
+
+type Response struct {
+    Result interface{} `json:"result"`
+}
+
+{% for function in functions %}
+func make{{ function|capitalize }}Endpoint() kitendpoint.Endpoint {
+    return func(ctx context.Context, request interface{}) (interface{}, error) {
+        req := request.(*functions.Numbers)
+        return Response{Result: functions.{{ function }}(req.Numbers)}, nil
+    }
+}
+{% endfor %}
+
+// Wraps the DecodeRequest function to match Go Kit's expected signature
+func decodeRequest(_ context.Context, r *http.Request) (interface{}, error) {
+    return functions.DecodeRequest(r)
+}
+
+func encodeResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+    return json.NewEncoder(w).Encode(response)
+}
+
+func main() {
+    {% for function in functions %}
+    http.Handle("/{{ function|lower }}", kithttp.NewServer(
+        make{{ function|capitalize }}Endpoint(),
+        decodeRequest,
+        encodeResponse,
+    ))
+    {% endfor %}
+
+    http.ListenAndServe(":8000", nil)
+}
