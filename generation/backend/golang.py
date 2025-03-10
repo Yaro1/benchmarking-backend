@@ -4,7 +4,7 @@ from jinja2 import Environment, FileSystemLoader
 
 # Paths
 FUNCTIONS_FILE = "functions/golang/logic.go"
-TEMPLATES_DIR = "golang/templates/frameworks"
+TEMPLATES_DIR = "templates/golang/frameworks"
 OUTPUT_DIR = "backends/golang"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)

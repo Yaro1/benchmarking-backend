@@ -2,7 +2,7 @@ import os
 from jinja2 import Environment, FileSystemLoader
 
 # Directory paths
-TEMPLATES_DIR = "golang/templates"
+TEMPLATES_DIR = "templates/golang"
 OUTPUT_DIR = "dockerfiles/golang"
 SERVICES_DIR = "backends/golang"
 
