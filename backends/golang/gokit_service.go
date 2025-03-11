@@ -46,25 +46,25 @@ func encodeResponse(_ context.Context, w http.ResponseWriter, response interface
 }
 
 func main() {
-    
+
     http.Handle("/compute", kithttp.NewServer(
         makeComputeEndpoint(),
         decodeRequest,
         encodeResponse,
     ))
-    
+
     http.Handle("/multiply", kithttp.NewServer(
         makeMultiplyEndpoint(),
         decodeRequest,
         encodeResponse,
     ))
-    
+
     http.Handle("/average", kithttp.NewServer(
         makeAverageEndpoint(),
         decodeRequest,
         encodeResponse,
     ))
-    
+
 
     http.ListenAndServe(":8000", nil)
 }

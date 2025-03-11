@@ -23,7 +23,9 @@ def load_functions():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
-    functions = {name: func for name, func in inspect.getmembers(module, inspect.isfunction)}
+    functions = {
+        name: func for name, func in inspect.getmembers(module, inspect.isfunction)
+    }
     return functions
 
 

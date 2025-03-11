@@ -9,7 +9,7 @@ import (
 func main() {
     r := gin.Default()
 
-    
+
     r.POST("/compute", func(c *gin.Context) {
         nums, err := functions.DecodeRequest(c.Request)
         if err != nil {
@@ -18,7 +18,7 @@ func main() {
         }
         c.JSON(http.StatusOK, gin.H{"result": functions.Compute(nums.Numbers)})
     })
-    
+
     r.POST("/multiply", func(c *gin.Context) {
         nums, err := functions.DecodeRequest(c.Request)
         if err != nil {
@@ -27,7 +27,7 @@ func main() {
         }
         c.JSON(http.StatusOK, gin.H{"result": functions.Multiply(nums.Numbers)})
     })
-    
+
     r.POST("/average", func(c *gin.Context) {
         nums, err := functions.DecodeRequest(c.Request)
         if err != nil {
@@ -36,7 +36,7 @@ func main() {
         }
         c.JSON(http.StatusOK, gin.H{"result": functions.Average(nums.Numbers)})
     })
-    
+
 
     r.Run(":8000")
 }

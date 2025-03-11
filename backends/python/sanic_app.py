@@ -1,6 +1,6 @@
+from logic import average, compute, multiply
 from sanic import Sanic
 from sanic.response import json
-from logic import average, compute, multiply
 
 app = Sanic("SanicApp")
 
@@ -11,11 +11,13 @@ async def average_handler(request):
     result = average(**data)
     return json({"status": "success", "data": result})
 
+
 @app.post("/compute")
 async def compute_handler(request):
     data = request.json
     result = compute(**data)
     return json({"status": "success", "data": result})
+
 
 @app.post("/multiply")
 async def multiply_handler(request):

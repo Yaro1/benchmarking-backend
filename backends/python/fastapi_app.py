@@ -10,11 +10,13 @@ async def average_handler(request: Request):
     result = average(**data)
     return {"status": "success", "data": result}
 
+
 @app.post("/compute")
 async def compute_handler(request: Request):
     data = await request.json()
     result = compute(**data)
     return {"status": "success", "data": result}
+
 
 @app.post("/multiply")
 async def multiply_handler(request: Request):
@@ -25,4 +27,5 @@ async def multiply_handler(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

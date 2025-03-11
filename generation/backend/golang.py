@@ -14,13 +14,16 @@ GOLANG_BACKEND_TEMPLATES = {
     "kratos": "Kratos.go.j2",
 }
 
+
 def extract_functions(file_path):
     """Extract function names dynamically from Go file."""
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         content = f.read()
-    return re.findall(r'func\s+(\w+)\s*\(', content)
+    return re.findall(r"func\s+(\w+)\s*\(", content)
+
 
 GOLANG_FUNCTIONS = extract_functions(GOLANG_FUNCTIONS_FILE)
+
 
 def get_configuration():
     return {

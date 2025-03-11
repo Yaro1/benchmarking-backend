@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from logic import average, compute, multiply
 
 app = Flask(__name__)
@@ -10,11 +10,13 @@ def average_handler():
     result = average(**data)
     return jsonify({"status": "success", "data": result})
 
+
 @app.route("/compute", methods=["POST"])
 def compute_handler():
     data = request.get_json()
     result = compute(**data)
     return jsonify({"status": "success", "data": result})
+
 
 @app.route("/multiply", methods=["POST"])
 def multiply_handler():

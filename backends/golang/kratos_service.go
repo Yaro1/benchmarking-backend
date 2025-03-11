@@ -40,13 +40,13 @@ func AverageHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-    
+
     http.HandleFunc("/compute", ComputeHandler)
-    
+
     http.HandleFunc("/multiply", MultiplyHandler)
-    
+
     http.HandleFunc("/average", AverageHandler)
-    
+
 
     http.ListenAndServe(":8000", nil)
 }

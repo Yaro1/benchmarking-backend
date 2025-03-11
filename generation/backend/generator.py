@@ -1,9 +1,7 @@
 import os
-import importlib.util
-import inspect
-from jinja2 import Environment, FileSystemLoader
 
 from golang import get_configuration as get_configuration_golang
+from jinja2 import Environment, FileSystemLoader
 from python import get_configuration as get_configuration_python
 
 

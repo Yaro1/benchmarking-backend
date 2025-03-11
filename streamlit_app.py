@@ -1,18 +1,20 @@
-import streamlit as st
-import pandas as pd
-import os
 import glob
+import os
 import re
+
+import pandas as pd
 import plotly.express as px
+import streamlit as st
 
 # Define the results folder
 RESULTS_DIR = "results"
 
 st.title("📊 Backend Framework Performance Comparison")
 
+
 # Helper function to parse wrk text files
 def parse_wrk_output(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         content = file.read()
 
     # Extract metrics using regex
@@ -24,19 +26,20 @@ def parse_wrk_output(file_path):
     transfer_value = 0
     if transfer_per_sec:
         transfer_value = float(transfer_per_sec.group(1))
-        if transfer_per_sec.group(2) == 'MB':
+        if transfer_per_sec.group(2) == "MB":
             transfer_value *= 1024
 
     return (
         float(latency.group(1)) if latency else None,
         float(req_per_sec.group(1)) if req_per_sec else None,
-        transfer_value
+        transfer_value,
     )
+
 
 # Load and display data for each framework
 frameworks = {}
 for csv_file in glob.glob(os.path.join(RESULTS_DIR, "*_results.csv")):
-    name = os.path.basename(csv_file).split('_')[0]
+    name = os.path.basename(csv_file).split("_")[0]
     text_file = csv_file.replace("csv", "txt")
 
     if not os.path.exists(text_file):
@@ -61,20 +64,22 @@ for csv_file in glob.glob(os.path.join(RESULTS_DIR, "*_results.csv")):
         "CSV Data": csv_data,
         "Latency (ms)": latency,
         "Requests/sec": req_per_sec,
-        "Transfer/sec (KB)": transfer_per_sec
+        "Transfer/sec (KB)": transfer_per_sec,
     }
 
 # Prepare comparison DataFrame
 if frameworks:
-    comparison_df = pd.DataFrame([
-        {
-            "Framework": name,
-            "Latency (ms)": data["Latency (ms)"],
-            "Requests/sec": data["Requests/sec"],
-            "Transfer/sec (KB)": data["Transfer/sec (KB)"]
-        }
-        for name, data in frameworks.items()
-    ])
+    comparison_df = pd.DataFrame(
+        [
+            {
+                "Framework": name,
+                "Latency (ms)": data["Latency (ms)"],
+                "Requests/sec": data["Requests/sec"],
+                "Transfer/sec (KB)": data["Transfer/sec (KB)"],
+            }
+            for name, data in frameworks.items()
+        ]
+    )
 
     # Display the comparison table
     st.header("📈 Requests/sec and Latency Comparison")
@@ -98,7 +103,7 @@ if frameworks:
     y_axis_labels = {
         "CPU_Usage": "CPU Usage (%)",
         "Memory_Usage": "Memory Usage (%)",
-        "Network_IO": "Network Throughput (MB/s)"
+        "Network_IO": "Network Throughput (MB/s)",
     }
 
     for resource in ["CPU_Usage", "Memory_Usage", "Network_IO"]:
@@ -115,7 +120,7 @@ if frameworks:
             y=resource,
             color="Framework",
             title=f'{resource.replace("_", " ")} Comparison Across Frameworks',
-            labels={"Relative_Seconds": "Seconds", resource: y_axis_labels[resource]}
+            labels={"Relative_Seconds": "Seconds", resource: y_axis_labels[resource]},
         )
         st.plotly_chart(fig, use_container_width=True)
 

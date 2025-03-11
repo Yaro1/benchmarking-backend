@@ -12,6 +12,7 @@ GOLANG_BACKENDS = {
 }
 GOLANG_OUTPUT_DIR = "dockerfiles/golang"
 
+
 def get_configuration():
     return {
         "template_dir": GOLANG_TEMPLATES_DIR,

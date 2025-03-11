@@ -1,11 +1,11 @@
-import subprocess
-import time
 import csv
-import docker
 import os
-from queue import Queue
+import subprocess
 import threading
-import json
+import time
+from queue import Queue
+
+import docker
 
 BACKENDS = {
     "python": ["fastapi", "flask", "django", "starlette", "sanic", "tornado", "bottle"],
@@ -17,18 +17,22 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 client = docker.from_env()
 
+
 def build_and_run_container(backend, language):
     """Builds and runs a container for the given backend."""
     dockerfile = f"dockerfiles/{language}/Dockerfile.{backend}"
     image_name = f"benchmark_{backend}"
 
     print(f"🛠 Building Docker image for {backend}...")
-    subprocess.run(["docker", "build", "-t", image_name, "-f", dockerfile, "."], check=True)
+    subprocess.run(
+        ["docker", "build", "-t", image_name, "-f", dockerfile, "."], check=True
+    )
 
     print(f"🚀 Starting container for {backend}...")
-    container = client.containers.run(image_name, detach=True, ports={'8000/tcp': 8000})
+    container = client.containers.run(image_name, detach=True, ports={"8000/tcp": 8000})
     time.sleep(5)
     return container
+
 
 def calculate_cpu_percentage(previous_stats, current_stats):
     """Calculates the CPU usage percentage."""
@@ -43,9 +47,12 @@ def calculate_cpu_percentage(previous_stats, current_stats):
 
     num_cpus = len(current_stats["cpu_stats"]["cpu_usage"].get("percpu_usage", [])) or 1
 
-    cpu_percentage = (cpu_delta / system_delta) * num_cpus * 100 if system_delta > 0 else 0
+    cpu_percentage = (
+        (cpu_delta / system_delta) * num_cpus * 100 if system_delta > 0 else 0
+    )
 
     return cpu_percentage
+
 
 def get_container_stats(container, duration, queue):
     """Monitors CPU, memory, and network usage of the container."""
@@ -71,7 +78,7 @@ def get_container_stats(container, duration, queue):
         networks = usage.get("networks", {})
         curr_rx = sum(net["rx_bytes"] for net in networks.values())
 
-        net_throughput = (curr_rx - prev_rx) / (1024 ** 2)  # Convert bytes to MB
+        net_throughput = (curr_rx - prev_rx) / (1024**2)  # Convert bytes to MB
 
         timestamp = time.time()
         stats.append((timestamp, cpu_percentage, mem_percentage, net_throughput))
@@ -81,12 +88,14 @@ def get_container_stats(container, duration, queue):
 
     queue.put(stats)
 
+
 def run_wrk(backend, url, duration):
     """Runs wrk load test and captures results."""
     cmd = f"wrk -t4 -c100 -d{duration}s -s post.lua {url}"
     print(f"📊 Running load test for {backend} at {url} with POST...")
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     return result.stdout
+
 
 def save_results(backend, wrk_output, resource_stats, language):
     """Saves benchmark results to a CSV file."""
@@ -95,7 +104,9 @@ def save_results(backend, wrk_output, resource_stats, language):
 
     with open(csv_file, "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["Timestamp", "CPU_Usage", "Memory_Usage", "Network_IO", "Language"])
+        writer.writerow(
+            ["Timestamp", "CPU_Usage", "Memory_Usage", "Network_IO", "Language"]
+        )
         writer.writerows(resource_stats)
 
     with open(wrk_file, "w") as f:
@@ -103,17 +114,20 @@ def save_results(backend, wrk_output, resource_stats, language):
 
     print(f"✅ Results saved: {csv_file}")
 
+
 def benchmark_backend(backend, language):
     """Builds, runs, benchmarks, and collects results for a backend in parallel."""
     print(f"\n🚀 Starting {language} benchmark for {backend}...")
 
     container = build_and_run_container(backend, language)
-    url = f"http://localhost:8000/compute"
+    url = "http://localhost:8000/compute"
     duration = 30
 
     queue = Queue()
 
-    stats_thread = threading.Thread(target=get_container_stats, args=(container, duration, queue))
+    stats_thread = threading.Thread(
+        target=get_container_stats, args=(container, duration, queue)
+    )
     stats_thread.start()
 
     wrk_output = run_wrk(backend, url, duration)
@@ -127,6 +141,7 @@ def benchmark_backend(backend, language):
     container.stop()
     container.remove()
     print(f"🛑 Container for {backend} stopped and removed.")
+
 
 if __name__ == "__main__":
     for language in BACKENDS:

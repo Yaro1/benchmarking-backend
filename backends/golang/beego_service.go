@@ -43,13 +43,13 @@ func (c *AppController) Average() {
 
 func main() {
     web.BConfig.Listen.HTTPPort = 8000
-    
-    
+
+
     web.Router("/compute", &AppController{}, "post:Compute")
-    
+
     web.Router("/multiply", &AppController{}, "post:Multiply")
-    
+
     web.Router("/average", &AppController{}, "post:Average")
-    
+
     web.Run()
 }

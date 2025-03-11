@@ -51,13 +51,13 @@ func AverageHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
     r := chi.NewRouter()
 
-    
+
     r.Post("/compute", ComputeHandler)
-    
+
     r.Post("/multiply", MultiplyHandler)
-    
+
     r.Post("/average", AverageHandler)
-    
+
 
     http.ListenAndServe(":8000", r)
 }

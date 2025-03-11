@@ -23,7 +23,7 @@ func (c *AppController) {{ function|capitalize }}() {
 
 func main() {
     web.BConfig.Listen.HTTPPort = 8000
-    
+
     {% for function in functions %}
     web.Router("/{{ function|lower }}", &AppController{}, "post:{{ function|capitalize }}")
     {% endfor %}

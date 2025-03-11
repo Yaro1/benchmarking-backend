@@ -60,13 +60,13 @@ func AverageHandler(c *fiber.Ctx) error {
 func main() {
     app := fiber.New()
 
-    
+
     app.Post("/compute", ComputeHandler)
-    
+
     app.Post("/multiply", MultiplyHandler)
-    
+
     app.Post("/average", AverageHandler)
-    
+
 
     app.Listen(":8000")
 }

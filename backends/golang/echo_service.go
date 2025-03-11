@@ -9,7 +9,7 @@ import (
 func main() {
     e := echo.New()
 
-    
+
     e.POST("/compute", func(c echo.Context) error {
         nums, err := functions.DecodeRequest(c.Request())
         if err != nil {
@@ -17,7 +17,7 @@ func main() {
         }
         return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Compute(nums.Numbers) })
     })
-    
+
     e.POST("/multiply", func(c echo.Context) error {
         nums, err := functions.DecodeRequest(c.Request())
         if err != nil {
@@ -25,7 +25,7 @@ func main() {
         }
         return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Multiply(nums.Numbers) })
     })
-    
+
     e.POST("/average", func(c echo.Context) error {
         nums, err := functions.DecodeRequest(c.Request())
         if err != nil {
@@ -33,7 +33,7 @@ func main() {
         }
         return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Average(nums.Numbers) })
     })
-    
+
 
     e.Start(":8000")
 }

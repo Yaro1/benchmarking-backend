@@ -1,0 +1,26 @@
+[tool.black]
+line-length = 88
+exclude = '''
+/(
+    backends
+    | functions
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+skip = ["backends", "functions"]
+
+[mypy]
+disallow_untyped_defs = true
+ignore_missing_imports = true
+strict_optional = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unused_configs = true
+exclude = '(backends|functions)'
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

@@ -1,13 +1,16 @@
-from django.http import JsonResponse
-from django.conf import settings
-from django.urls import path
 import json
+import logging
 import os
 import sys
-import logging
+
+from django.conf import settings
+from django.http import JsonResponse
+from django.urls import path
 
 # Ensure the correct path for function imports
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../functions/python")))
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "../functions/python"))
+)
 
 from logic import average, compute, multiply
 
@@ -20,16 +23,26 @@ settings.configure(
 )
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 def convert_to_numbers(data):
     """Convert input data to a list of numbers."""
     try:
-        return [float(item) for item in data if isinstance(item, (int, float, str)) and str(item).replace('.', '', 1).isdigit()]
+        return [
+            float(item)
+            for item in data
+            if isinstance(item, (int, float, str))
+            and str(item).replace(".", "", 1).isdigit()
+        ]
     except Exception as e:
         raise ValueError(f"Invalid input for number conversion: {e}")
 
+
 # Handlers for each function with unique numbering
+
 
 def average_handler(request):
     if request.method == "POST":
@@ -55,6 +68,7 @@ def average_handler(request):
             logging.error(f"Unexpected error for average: {e}")
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
+
 def compute_handler(request):
     if request.method == "POST":
         try:
@@ -78,6 +92,7 @@ def compute_handler(request):
         except Exception as e:
             logging.error(f"Unexpected error for compute: {e}")
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
+
 
 def multiply_handler(request):
     if request.method == "POST":
@@ -105,16 +120,14 @@ def multiply_handler(request):
 
 
 urlpatterns = [
-
     path("average", average_handler),
-
     path("compute", compute_handler),
-
     path("multiply", multiply_handler),
-
 ]
 
 if __name__ == "__main__":
-    from django.core.management import execute_from_command_line
     import sys
+
+    from django.core.management import execute_from_command_line
+
     execute_from_command_line([sys.argv[0], "runserver", "0.0.0.0:8000"])

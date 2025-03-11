@@ -1,15 +1,14 @@
 import os
-from jinja2 import Environment, FileSystemLoader
-import yaml
 
 from golang import get_configuration as get_configuration_golang
+from jinja2 import Environment, FileSystemLoader
 from python import get_configuration as get_configuration_python
 
 
 def generate_dockerfiles(
-    template_dir, 
-    output_dir, 
-    backends, 
+    template_dir,
+    output_dir,
+    backends,
     template_dockerfile,
     docker_prefix,
 ):
