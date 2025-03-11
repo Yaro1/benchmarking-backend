@@ -6,7 +6,7 @@ import re
 import plotly.express as px
 
 # Define the results folder
-RESULTS_DIR = "results/python"
+RESULTS_DIR = "results"
 
 st.title("📊 Backend Framework Performance Comparison")
 

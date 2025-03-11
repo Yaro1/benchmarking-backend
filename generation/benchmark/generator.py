@@ -7,16 +7,19 @@ from queue import Queue
 import threading
 import json
 
-# Define backends to test
-BACKENDS = ["fastapi", "flask", "django", "starlette", "sanic", "tornado", "bottle"]
-RESULTS_DIR = "results/python"
+BACKENDS = {
+    "python": ["fastapi", "flask", "django", "starlette", "sanic", "tornado", "bottle"],
+    "golang": ["beego", "chi", "echo", "fiber", "gin", "gokit", "kratos"],
+}
+
+RESULTS_DIR = "results"
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
-client = docker.from_env()  # Connect to Docker
+client = docker.from_env()
 
-def build_and_run_container(backend):
+def build_and_run_container(backend, language):
     """Builds and runs a container for the given backend."""
-    dockerfile = f"dockerfiles/python/Dockerfile.{backend}"
+    dockerfile = f"dockerfiles/{language}/Dockerfile.{backend}"
     image_name = f"benchmark_{backend}"
 
     print(f"🛠 Building Docker image for {backend}...")
@@ -24,7 +27,7 @@ def build_and_run_container(backend):
 
     print(f"🚀 Starting container for {backend}...")
     container = client.containers.run(image_name, detach=True, ports={'8000/tcp': 8000})
-    time.sleep(5)  # Wait for the backend to start
+    time.sleep(5)
     return container
 
 def calculate_cpu_percentage(previous_stats, current_stats):
@@ -85,51 +88,49 @@ def run_wrk(backend, url, duration):
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
     return result.stdout
 
-def save_results(backend, wrk_output, resource_stats):
+def save_results(backend, wrk_output, resource_stats, language):
     """Saves benchmark results to a CSV file."""
-    csv_file = os.path.join(RESULTS_DIR, f"{backend}_results.csv")
-    json_file = os.path.join(RESULTS_DIR, f"{backend}_results.txt")
+    csv_file = os.path.join(RESULTS_DIR, f"{language}_{backend}_results.csv")
+    wrk_file = os.path.join(RESULTS_DIR, f"{language}_{backend}_results.txt")
 
     with open(csv_file, "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["Timestamp", "CPU_Usage", "Memory_Usage", "Network_IO"])
+        writer.writerow(["Timestamp", "CPU_Usage", "Memory_Usage", "Network_IO", "Language"])
         writer.writerows(resource_stats)
 
-    with open(json_file, "w") as f:
+    with open(wrk_file, "w") as f:
         f.write(wrk_output)
 
     print(f"✅ Results saved: {csv_file}")
 
-def benchmark_backend(backend):
+def benchmark_backend(backend, language):
     """Builds, runs, benchmarks, and collects results for a backend in parallel."""
-    print(f"\n🚀 Starting benchmark for {backend}...")
+    print(f"\n🚀 Starting {language} benchmark for {backend}...")
 
-    container = build_and_run_container(backend)
+    container = build_and_run_container(backend, language)
     url = f"http://localhost:8000/compute"
-    duration = 30  # Benchmark duration in seconds
+    duration = 30
 
     queue = Queue()
 
-    # Start stats collection in a thread
     stats_thread = threading.Thread(target=get_container_stats, args=(container, duration, queue))
     stats_thread.start()
 
-    # Run wrk directly in main thread
     wrk_output = run_wrk(backend, url, duration)
 
-    # Wait for stats collection to complete
     stats_thread.join()
 
     resource_stats = queue.get()
-
-    save_results(backend, wrk_output, resource_stats)
+    resource_stats_with_language = [(*row, language) for row in resource_stats]
+    save_results(backend, wrk_output, resource_stats_with_language, language)
 
     container.stop()
     container.remove()
     print(f"🛑 Container for {backend} stopped and removed.")
 
 if __name__ == "__main__":
-    for backend in BACKENDS:
-        benchmark_backend(backend)
+    for language in BACKENDS:
+        for backend in BACKENDS[language]:
+            benchmark_backend(backend, language)
 
     print("\n🎉 All benchmarks completed! Check the results folder.")

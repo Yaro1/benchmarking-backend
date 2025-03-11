@@ -1,34 +1,22 @@
-import os
-from jinja2 import Environment, FileSystemLoader
+GOLANG_TEMPLATES_DIR = "templates/golang"
+GOLANG_TEMPLATE_DOCKERFILE = "dockerfile_go_1_21.j2"
+GOLANG_DOCKER_PREFIX = "Dockerfile"
+GOLANG_BACKENDS = {
+    "beego": {"framework": "beego"},
+    "chi": {"framework": "chi"},
+    "echo": {"framework": "echo"},
+    "fiber": {"framework": "fiber"},
+    "gin": {"framework": "gin"},
+    "gokit": {"framework": "gokit"},
+    "kratos": {"framework": "kratos"},
+}
+GOLANG_OUTPUT_DIR = "dockerfiles/golang"
 
-# Directory paths
-TEMPLATES_DIR = "templates/golang"
-OUTPUT_DIR = "dockerfiles/golang"
-SERVICES_DIR = "backends/golang"
-
-# Ensure the output directory exists
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-# Setup Jinja2 environment
-env = Environment(loader=FileSystemLoader(TEMPLATES_DIR))
-
-def generate_dockerfiles():
-    # List all generated services to determine frameworks
-    service_files = [f for f in os.listdir(SERVICES_DIR) if f.endswith("_service.go")]
-
-    for service_file in service_files:
-        framework = service_file.split('_')[0]
-        template = env.get_template("dockerfile_go_1_21.j2")
-
-        # Render the template with framework name
-        dockerfile_content = template.render(framework=framework)
-
-        # Define output path for the Dockerfile
-        output_path = os.path.join(OUTPUT_DIR, f"Dockerfile.{framework}")
-        with open(output_path, "w") as f:
-            f.write(dockerfile_content)
-
-        print(f"✅ Dockerfile generated for {framework}: {output_path}")
-
-if __name__ == "__main__":
-    generate_dockerfiles()
+def get_configuration():
+    return {
+        "template_dir": GOLANG_TEMPLATES_DIR,
+        "output_dir": GOLANG_OUTPUT_DIR,
+        "backends": GOLANG_BACKENDS,
+        "template_dockerfile": GOLANG_TEMPLATE_DOCKERFILE,
+        "docker_prefix": GOLANG_DOCKER_PREFIX,
+    }
