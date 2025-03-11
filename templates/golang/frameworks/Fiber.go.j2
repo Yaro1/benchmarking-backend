@@ -16,12 +16,12 @@ func {{ function|capitalize }}Handler(c *fiber.Ctx) error {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    nums, err := functions.DecodeRequest(req)
+    items, err := functions.DecodeRequest(req)
     if err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    return c.JSON(fiber.Map{"result": functions.{{ function }}(nums.Numbers)})
+    return c.JSON(fiber.Map{"result": functions.{{ function }}(items.Items)})
 }
 {% endfor %}
 

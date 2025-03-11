@@ -5,13 +5,13 @@ import (
 	"net/http"
 )
 
-type Numbers struct {
-	Numbers []int `json:"numbers"`
+type Items struct {
+	Items []int `json:"items"`
 }
 
 // DecodeRequest parses JSON request into Numbers struct.
-func DecodeRequest(r *http.Request) (*Numbers, error) {
-	var nums Numbers
-	err := json.NewDecoder(r.Body).Decode(&nums)
-	return &nums, err
+func DecodeRequest(r *http.Request) (*Items, error) {
+	var items Items
+	err := json.NewDecoder(r.Body).Decode(&items)
+	return &items, err
 }

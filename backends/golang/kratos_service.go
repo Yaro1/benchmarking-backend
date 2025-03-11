@@ -12,41 +12,41 @@ type Response struct {
 
 
 func ComputeHandler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
-    json.NewEncoder(w).Encode(Response{Result: functions.Compute(nums.Numbers)})
+    json.NewEncoder(w).Encode(Response{Result: functions.Compute(items.Items)})
 }
 
 func MultiplyHandler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
-    json.NewEncoder(w).Encode(Response{Result: functions.Multiply(nums.Numbers)})
+    json.NewEncoder(w).Encode(Response{Result: functions.Multiply(items.Items)})
 }
 
 func AverageHandler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
-    json.NewEncoder(w).Encode(Response{Result: functions.Average(nums.Numbers)})
+    json.NewEncoder(w).Encode(Response{Result: functions.Average(items.Items)})
 }
 
 
 func main() {
-
+    
     http.HandleFunc("/compute", ComputeHandler)
-
+    
     http.HandleFunc("/multiply", MultiplyHandler)
-
+    
     http.HandleFunc("/average", AverageHandler)
-
+    
 
     http.ListenAndServe(":8000", nil)
 }

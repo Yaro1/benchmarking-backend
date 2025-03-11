@@ -11,11 +11,11 @@ type AppController struct {
 
 {% for function in functions %}
 func (c *AppController) {{ function|capitalize }}() {
-    nums, err := functions.DecodeRequest(c.Ctx.Request)
+    items, err := functions.DecodeRequest(c.Ctx.Request)
     if err != nil {
         c.Data["json"] = map[string]string{"error": err.Error()}
     } else {
-        c.Data["json"] = map[string]interface{}{ "result": functions.{{ function }}(nums.Numbers)}
+        c.Data["json"] = map[string]interface{}{ "result": functions.{{ function }}(items.Items)}
     }
     c.ServeJSON()
 }

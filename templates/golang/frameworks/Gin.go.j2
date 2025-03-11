@@ -11,12 +11,12 @@ func main() {
 
     {% for function in functions %}
     r.POST("/{{ function|lower }}", func(c *gin.Context) {
-        nums, err := functions.DecodeRequest(c.Request)
+        items, err := functions.DecodeRequest(c.Request)
         if err != nil {
             c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
             return
         }
-        c.JSON(http.StatusOK, gin.H{"result": functions.{{ function }}(nums.Numbers)})
+        c.JSON(http.StatusOK, gin.H{"result": functions.{{ function }}(items.Items)})
     })
     {% endfor %}
 

@@ -16,12 +16,12 @@ func ComputeHandler(c *fiber.Ctx) error {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    nums, err := functions.DecodeRequest(req)
+    items, err := functions.DecodeRequest(req)
     if err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    return c.JSON(fiber.Map{"result": functions.Compute(nums.Numbers)})
+    return c.JSON(fiber.Map{"result": functions.Compute(items.Items)})
 }
 
 func MultiplyHandler(c *fiber.Ctx) error {
@@ -32,12 +32,12 @@ func MultiplyHandler(c *fiber.Ctx) error {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    nums, err := functions.DecodeRequest(req)
+    items, err := functions.DecodeRequest(req)
     if err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    return c.JSON(fiber.Map{"result": functions.Multiply(nums.Numbers)})
+    return c.JSON(fiber.Map{"result": functions.Multiply(items.Items)})
 }
 
 func AverageHandler(c *fiber.Ctx) error {
@@ -48,25 +48,25 @@ func AverageHandler(c *fiber.Ctx) error {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    nums, err := functions.DecodeRequest(req)
+    items, err := functions.DecodeRequest(req)
     if err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
     }
 
-    return c.JSON(fiber.Map{"result": functions.Average(nums.Numbers)})
+    return c.JSON(fiber.Map{"result": functions.Average(items.Items)})
 }
 
 
 func main() {
     app := fiber.New()
 
-
+    
     app.Post("/compute", ComputeHandler)
-
+    
     app.Post("/multiply", MultiplyHandler)
-
+    
     app.Post("/average", AverageHandler)
-
+    
 
     app.Listen(":8000")
 }

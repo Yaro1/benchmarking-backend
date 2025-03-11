@@ -11,11 +11,11 @@ func main() {
 
     {% for function in functions %}
     e.POST("/{{ function|lower }}", func(c echo.Context) error {
-        nums, err := functions.DecodeRequest(c.Request())
+        items, err := functions.DecodeRequest(c.Request())
         if err != nil {
             return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
         }
-        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.{{ function }}(nums.Numbers) })
+        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.{{ function }}(items.Items) })
     })
     {% endfor %}
 

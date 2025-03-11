@@ -16,22 +16,22 @@ type Response struct {
 
 func makeComputeEndpoint() kitendpoint.Endpoint {
     return func(ctx context.Context, request interface{}) (interface{}, error) {
-        req := request.(*functions.Numbers)
-        return Response{Result: functions.Compute(req.Numbers)}, nil
+        req := request.(*functions.Items)
+        return Response{Result: functions.Compute(req.Items)}, nil
     }
 }
 
 func makeMultiplyEndpoint() kitendpoint.Endpoint {
     return func(ctx context.Context, request interface{}) (interface{}, error) {
-        req := request.(*functions.Numbers)
-        return Response{Result: functions.Multiply(req.Numbers)}, nil
+        req := request.(*functions.Items)
+        return Response{Result: functions.Multiply(req.Items)}, nil
     }
 }
 
 func makeAverageEndpoint() kitendpoint.Endpoint {
     return func(ctx context.Context, request interface{}) (interface{}, error) {
-        req := request.(*functions.Numbers)
-        return Response{Result: functions.Average(req.Numbers)}, nil
+        req := request.(*functions.Items)
+        return Response{Result: functions.Average(req.Items)}, nil
     }
 }
 
@@ -46,25 +46,25 @@ func encodeResponse(_ context.Context, w http.ResponseWriter, response interface
 }
 
 func main() {
-
+    
     http.Handle("/compute", kithttp.NewServer(
         makeComputeEndpoint(),
         decodeRequest,
         encodeResponse,
     ))
-
+    
     http.Handle("/multiply", kithttp.NewServer(
         makeMultiplyEndpoint(),
         decodeRequest,
         encodeResponse,
     ))
-
+    
     http.Handle("/average", kithttp.NewServer(
         makeAverageEndpoint(),
         decodeRequest,
         encodeResponse,
     ))
-
+    
 
     http.ListenAndServe(":8000", nil)
 }

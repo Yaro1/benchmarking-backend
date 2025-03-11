@@ -42,6 +42,12 @@ clean:
 	find . -name '*.pyc' -delete
 	find . -name '*.pyo' -delete
 
+# Run benchmarks
+run:
+	python3 generation/backend/generator.py
+	python3 generation/dockerfile/generator.py
+	python3 generation/benchmark/generator.py
+
 # Usage:
 # make install        # Install dependencies and tools
 # make install-hooks  # Set up pre-commit hooks

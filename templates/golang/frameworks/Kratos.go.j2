@@ -12,12 +12,12 @@ type Response struct {
 
 {% for function in functions %}
 func {{ function|capitalize }}Handler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
-    json.NewEncoder(w).Encode(Response{Result: functions.{{ function }}(nums.Numbers)})
+    json.NewEncoder(w).Encode(Response{Result: functions.{{ function }}(items.Items)})
 }
 {% endfor %}
 

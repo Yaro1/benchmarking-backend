@@ -9,7 +9,7 @@ import (
 
 
 func ComputeHandler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     w.Header().Set("Content-Type", "application/json")
 
     if err != nil {
@@ -18,11 +18,11 @@ func ComputeHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.Compute(nums.Numbers)})
+    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.Compute(items.Items)})
 }
 
 func MultiplyHandler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     w.Header().Set("Content-Type", "application/json")
 
     if err != nil {
@@ -31,11 +31,11 @@ func MultiplyHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.Multiply(nums.Numbers)})
+    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.Multiply(items.Items)})
 }
 
 func AverageHandler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     w.Header().Set("Content-Type", "application/json")
 
     if err != nil {
@@ -44,20 +44,20 @@ func AverageHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.Average(nums.Numbers)})
+    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.Average(items.Items)})
 }
 
 
 func main() {
     r := chi.NewRouter()
 
-
+    
     r.Post("/compute", ComputeHandler)
-
+    
     r.Post("/multiply", MultiplyHandler)
-
+    
     r.Post("/average", AverageHandler)
-
+    
 
     http.ListenAndServe(":8000", r)
 }

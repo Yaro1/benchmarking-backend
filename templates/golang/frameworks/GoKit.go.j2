@@ -16,8 +16,8 @@ type Response struct {
 {% for function in functions %}
 func make{{ function|capitalize }}Endpoint() kitendpoint.Endpoint {
     return func(ctx context.Context, request interface{}) (interface{}, error) {
-        req := request.(*functions.Numbers)
-        return Response{Result: functions.{{ function }}(req.Numbers)}, nil
+        req := request.(*functions.Items)
+        return Response{Result: functions.{{ function }}(req.Items)}, nil
     }
 }
 {% endfor %}

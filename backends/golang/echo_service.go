@@ -9,31 +9,31 @@ import (
 func main() {
     e := echo.New()
 
-
+    
     e.POST("/compute", func(c echo.Context) error {
-        nums, err := functions.DecodeRequest(c.Request())
+        items, err := functions.DecodeRequest(c.Request())
         if err != nil {
             return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
         }
-        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Compute(nums.Numbers) })
+        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Compute(items.Items) })
     })
-
+    
     e.POST("/multiply", func(c echo.Context) error {
-        nums, err := functions.DecodeRequest(c.Request())
+        items, err := functions.DecodeRequest(c.Request())
         if err != nil {
             return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
         }
-        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Multiply(nums.Numbers) })
+        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Multiply(items.Items) })
     })
-
+    
     e.POST("/average", func(c echo.Context) error {
-        nums, err := functions.DecodeRequest(c.Request())
+        items, err := functions.DecodeRequest(c.Request())
         if err != nil {
             return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
         }
-        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Average(nums.Numbers) })
+        return c.JSON(http.StatusOK, map[string]interface{}{ "result": functions.Average(items.Items) })
     })
-
+    
 
     e.Start(":8000")
 }

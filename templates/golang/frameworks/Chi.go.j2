@@ -9,7 +9,7 @@ import (
 
 {% for function in functions %}
 func {{ function|capitalize }}Handler(w http.ResponseWriter, r *http.Request) {
-    nums, err := functions.DecodeRequest(r)
+    items, err := functions.DecodeRequest(r)
     w.Header().Set("Content-Type", "application/json")
 
     if err != nil {
@@ -18,7 +18,7 @@ func {{ function|capitalize }}Handler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.{{ function }}(nums.Numbers)})
+    json.NewEncoder(w).Encode(map[string]interface{}{"result": functions.{{ function }}(items.Items)})
 }
 {% endfor %}
 

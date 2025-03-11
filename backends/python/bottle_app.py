@@ -10,13 +10,11 @@ def average_handler():
     result = average(**data)
     return {"status": "success", "data": result}
 
-
 @app.post("/compute")
 def compute_handler():
     data = request.json
     result = compute(**data)
     return {"status": "success", "data": result}
-
 
 @app.post("/multiply")
 def multiply_handler():
