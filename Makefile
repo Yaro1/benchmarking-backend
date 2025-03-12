@@ -47,6 +47,7 @@ run:
 	python3 generation/backend/generator.py
 	python3 generation/dockerfile/generator.py
 	python3 generation/benchmark/generator.py
+	streamlit run streamlit_app.py
 
 # Usage:
 # make install        # Install dependencies and tools
@@ -54,4 +55,5 @@ run:
 # make run-hooks      # Run all hooks on all files
 # make format         # Format the code with Black and isort
 # make check          # Check code formatting, linting, and types
-# make clean          # Clean up Python caches and artifacts
+# make clean          # Clean up Python caches and artifact
+# make run            # Generate all backends, dockerfiles, results for the written functions run streamlit app
