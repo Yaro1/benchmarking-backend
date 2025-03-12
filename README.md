@@ -2,7 +2,7 @@
 # Performance Comparison
 
 ## Overview
-This project enables performance testing of functions written in different programming languages, currently supporting **Python** and **Golang**. It helps in comparing resource usage such as CPU, memory, and network throughput. 
+This project enables performance testing of functions written in different programming languages, currently supporting **Python** and **Golang**. It helps in comparing resource usage such as CPU, memory, and network throughput.
 
 ## Getting Started
 
@@ -44,22 +44,22 @@ make run
 ## Resource Consumption Metrics
 Resource consumption is calculated using community-recommended formulas.
 
-- **CPU Usage**:  
+- **CPU Usage**:
   ![CPU Usage Formula](images/cpu_usage_formula.png)
 
-- **Memory Consumption**:  
+- **Memory Consumption**:
   ![Memory Usage Formula](images/memory_usage_formula.png)
 
-- **Network Throughput**:  
+- **Network Throughput**:
   ![Network Throughput Formula](images/network_throughput_formula.png)
 
 ## Makefile Targets
-- `make install` - Install dependencies and development tools.  
-- `make install-hooks` - Install pre-commit hooks.  
-- `make run-hooks` - Run all pre-commit hooks manually.  
-- `make format` - Apply code formatting using **Black** and **isort**.  
-- `make check` - Check formatting and linting without applying changes.  
-- `make clean` - Clean up Python cache and artifacts.  
+- `make install` - Install dependencies and development tools.
+- `make install-hooks` - Install pre-commit hooks.
+- `make run-hooks` - Run all pre-commit hooks manually.
+- `make format` - Apply code formatting using **Black** and **isort**.
+- `make check` - Check formatting and linting without applying changes.
+- `make clean` - Clean up Python cache and artifacts.
 - `make run` - Generate required resources and run benchmarks via Streamlit.
 
 ## Pre-commit Configuration
@@ -81,8 +81,8 @@ To ensure consistent code quality:
   ```
 
 ## Contributing
-- Follow the project structure and coding standards.  
-- Ensure your tests and frameworks can parse and process test data correctly.  
+- Follow the project structure and coding standards.
+- Ensure your tests and frameworks can parse and process test data correctly.
 - Run all relevant tests and verify the results before submitting a pull request.
 
 ## License

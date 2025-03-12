@@ -72,7 +72,9 @@ if frameworks:
                 "Requests/sec": data["Requests/sec"],
                 "Transfer/sec (KB)": data["Transfer/sec (KB)"],
             }
-            for name, data in sorted(frameworks.items(), key=lambda x: -x[1]["Requests/sec"])
+            for name, data in sorted(
+                frameworks.items(), key=lambda x: -x[1]["Requests/sec"]
+            )
         ]
     )
 
